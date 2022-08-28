@@ -13,35 +13,13 @@ pipeline {
                 echo '<------------- Build completed --------------->'
             }
         }
-        stage('execute') {
-		steps {
-		script {
-			echo 'Using remote command over ssh'
-			sh 'echo "Today is:" date'
-			echo '*** Executing remote commands ***'
-	 		sh '''#!/bin/bash
-				date
-				ssh ec2-user@13.233.184.92 << ENDSSH
-				hostname -i
-				java -version
-			    	date
-			    	cd /tmp
-			    	pwd
-ENDSSH
-'''
-
-			sh '''
-				date
-				ssh ec2-user@13.233.184.92 << ENDSSH
-				hostname -i
-				javac -version
-				date
-				cd /tmp
-				pwd
-ENDSSH
-'''
-                }
-            }
-        }
+		stage ('Deploy') {
+			steps{
+				sshagent(credentials : ['deployment']) {
+				sh 'scp /home/ec2-user/.m2/repository/com/stalin/demo-workshop/2.0.1/demo-workshop-2.0.1.jar ec2-user@deploymentserver:/home/ec2-user/application/'
+				sh 'ssh -o StrictHostKeyChecking=no ec2-user@deploymentserver java -jar demo-workshop-2.0.1.jar'
+				}
+			}
+		}
     }
 }
