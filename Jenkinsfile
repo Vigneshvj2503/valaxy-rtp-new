@@ -1,5 +1,3 @@
-def version   = '1.0.3'
-def app
 pipeline {
     agent {
        node {
@@ -33,7 +31,3 @@ ENDSSH
             }
         }
     }
-}
-
-    }
- }
