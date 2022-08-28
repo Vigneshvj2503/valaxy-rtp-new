@@ -15,7 +15,10 @@ pipeline {
         }
 		stage ('Deploy') {
 			steps{
-				sshPublisher(publishers: [sshPublisherDesc(configName: 'deploymentserver', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'nohup java -jar demo-workshop-2.0.1.jar &', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ec2-user/application', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+				sshagent(credentials : ['deployment']) {
+				sh 'scp /home/ec2-user/.m2/repository/com/stalin/demo-workshop/2.0.1/demo-workshop-2.0.1.jar ec2-user@13.233.184.92:/home/ec2-user/application/'
+				sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.233.184.92 nohupjava -jar demo-workshop-2.0.1.jar &'
+				}
 			}
 		}
     }
