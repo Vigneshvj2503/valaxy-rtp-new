@@ -1,3 +1,5 @@
+def version   = '1.0.3'
+def app
 pipeline {
     agent {
        node {
@@ -13,13 +15,15 @@ pipeline {
                 echo '<------------- Build completed --------------->'
             }
         }
-        stage('Unit Test') {
-            steps {
-                echo '<--------------- Unit Testing started  --------------->'
-                sh 'mvn surefire-report:report'
-                echo '<------------- Unit Testing stopped  --------------->'
+        /**stage(" Deploy ") {
+          steps {
+            script {
+               echo '<--------------- Deploy Started --------------->'
+               sh './deploy.sh'
+               echo '<--------------- Deploy Ends --------------->'
             }
-        }
-	}
-}
-//
+          }
+        }**/
+
+    }
+ }
