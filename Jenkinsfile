@@ -13,7 +13,7 @@ pipeline {
                 echo '<------------- Build completed --------------->'
             }
         }
-	    stage('Unit Test') {
+	    stage('Unit Tests') {
             steps {
                 echo '<--------------- Unit Testing started  --------------->'
                 sh 'mvn surefire-report:report'
